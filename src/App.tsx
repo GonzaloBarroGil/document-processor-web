@@ -4,13 +4,10 @@ import { AuthProvider } from "./auth/auth-provider";
 import { LoginView } from "./auth/login-view";
 import { RequireAuth } from "./auth/require-auth";
 import { AppLayout } from "./components/app-layout";
+import { DocumentListView } from "./features/documents/document-list-view";
 
 function Dashboard() {
   return <h2>Dashboard</h2>;
-}
-
-function Documents() {
-  return <h2>Documents</h2>;
 }
 
 function Review() {
@@ -30,7 +27,7 @@ export function App() {
           <Route element={<RequireAuth />}>
             <Route element={<AppLayout />}>
               <Route index element={<Dashboard />} />
-              <Route path="documents" element={<Documents />} />
+              <Route path="documents" element={<DocumentListView />} />
               <Route path="review" element={<Review />} />
             </Route>
           </Route>
