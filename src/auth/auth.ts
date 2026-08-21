@@ -1,5 +1,7 @@
-import { apiClient } from "../api/client";
+import { apiClient, type components } from "../api/client";
 import { sessionStore } from "./session";
+
+export type CurrentUser = components["schemas"]["User"];
 
 export class AuthError extends Error {
   constructor(message: string) {
@@ -10,6 +12,16 @@ export class AuthError extends Error {
 
 export function isAuthenticated(): boolean {
   return sessionStore.getAccessToken() !== null;
+}
+
+export async function getCurrentUser(): Promise<CurrentUser> {
+  const { data, error } = await apiClient.GET("/api/v1/auth/me");
+
+  if (error !== undefined || data === undefined) {
+    throw new AuthError("Not authenticated");
+  }
+
+  return data;
 }
 
 export async function login(username: string, password: string): Promise<void> {

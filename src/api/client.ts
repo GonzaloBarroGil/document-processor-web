@@ -1,8 +1,8 @@
 import createClient from "openapi-fetch";
 
-import type { paths } from "./schema";
+import type { components, paths } from "./schema";
 
-export type { paths };
+export type { components, paths };
 
 const baseUrl = import.meta.env.VITE_API_URL ?? "http://localhost:8000";
 

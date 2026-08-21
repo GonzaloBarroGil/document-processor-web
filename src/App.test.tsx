@@ -4,11 +4,11 @@ import { describe, expect, it } from "vitest";
 import { App } from "./App";
 
 describe("App", () => {
-  it("renders the back-office title", () => {
+  it("redirects unauthenticated users to the login view", async () => {
     render(<App />);
 
     expect(
-      screen.getByRole("heading", { name: /document processor/i }),
+      await screen.findByRole("heading", { name: /sign in/i }),
     ).toBeInTheDocument();
   });
 });
