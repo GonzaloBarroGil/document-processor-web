@@ -1,4 +1,9 @@
 import "@testing-library/jest-dom/vitest";
+import { afterEach, vi } from "vitest";
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
 
 class MemoryStorage implements Storage {
   private readonly store = new Map<string, string>();
