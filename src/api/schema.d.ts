@@ -505,6 +505,109 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/api-keys": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List machine-client API keys */
+        get: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description List of API keys */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiKeyList"];
+                    };
+                };
+                403: components["responses"]["Forbidden"];
+            };
+        };
+        put?: never;
+        /**
+         * Create a machine-client API key
+         * @description The raw key is returned once and stored only as a SHA-256 hash.
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": components["schemas"]["ApiKeyCreateRequest"];
+                };
+            };
+            responses: {
+                /** @description Created API key (raw key shown once) */
+                201: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": components["schemas"]["ApiKeyCreateResponse"];
+                    };
+                };
+                403: components["responses"]["Forbidden"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/api-keys/{prefix}/revoke": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Revoke a machine-client API key */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path: {
+                    prefix: string;
+                };
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description Revoked */
+                204: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                403: components["responses"]["Forbidden"];
+                404: components["responses"]["NotFound"];
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -630,6 +733,24 @@ export interface components {
             status: components["schemas"]["DocumentStatus"];
             parsed_data: components["schemas"]["ParsedData"];
             validation_result?: components["schemas"]["ValidationResult"];
+        };
+        ApiKeyCreateRequest: {
+            label?: string | null;
+        };
+        ApiKeyCreateResponse: {
+            key: string;
+            prefix: string;
+            label?: string | null;
+        };
+        ApiKeyView: {
+            prefix: string;
+            label?: string | null;
+            /** Format: date-time */
+            created_at: string;
+            revoked: boolean;
+        };
+        ApiKeyList: {
+            items: components["schemas"]["ApiKeyView"][];
         };
     };
     responses: {

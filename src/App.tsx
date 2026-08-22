@@ -4,6 +4,7 @@ import { AuthProvider } from "./auth/auth-provider";
 import { LoginView } from "./auth/login-view";
 import { RequireAuth } from "./auth/require-auth";
 import { AppLayout } from "./components/app-layout";
+import { ApiKeysView } from "./features/api-keys/api-keys-view";
 import { DocumentDetailView } from "./features/documents/document-detail-view";
 import { DocumentListView } from "./features/documents/document-list-view";
 import { ReviewEditorView } from "./features/review/review-editor-view";
@@ -11,10 +12,6 @@ import { ReviewQueueView } from "./features/review/review-queue-view";
 
 function Dashboard() {
   return <h2>Dashboard</h2>;
-}
-
-function ApiKeys() {
-  return <h2>API Keys</h2>;
 }
 
 export function App() {
@@ -34,7 +31,7 @@ export function App() {
           </Route>
           <Route element={<RequireAuth adminOnly />}>
             <Route element={<AppLayout />}>
-              <Route path="api-keys" element={<ApiKeys />} />
+              <Route path="api-keys" element={<ApiKeysView />} />
             </Route>
           </Route>
         </Routes>
