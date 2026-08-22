@@ -6,13 +6,11 @@ import { RequireAuth } from "./auth/require-auth";
 import { AppLayout } from "./components/app-layout";
 import { DocumentDetailView } from "./features/documents/document-detail-view";
 import { DocumentListView } from "./features/documents/document-list-view";
+import { ReviewEditorView } from "./features/review/review-editor-view";
+import { ReviewQueueView } from "./features/review/review-queue-view";
 
 function Dashboard() {
   return <h2>Dashboard</h2>;
-}
-
-function Review() {
-  return <h2>Review</h2>;
 }
 
 function ApiKeys() {
@@ -30,7 +28,8 @@ export function App() {
               <Route index element={<Dashboard />} />
               <Route path="documents" element={<DocumentListView />} />
               <Route path="documents/:documentId" element={<DocumentDetailView />} />
-              <Route path="review" element={<Review />} />
+              <Route path="review" element={<ReviewQueueView />} />
+              <Route path="review/:documentId" element={<ReviewEditorView />} />
             </Route>
           </Route>
           <Route element={<RequireAuth adminOnly />}>
