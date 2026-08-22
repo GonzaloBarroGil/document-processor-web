@@ -1,10 +1,43 @@
+import { useState } from "react";
 import { useParams } from "react-router-dom";
 
+import {
+  downloadText,
+  exportDocumentCsv,
+  exportDocumentJson,
+} from "../export/export-document";
 import { useDocument } from "./use-document";
 
 export function DocumentDetailView() {
   const { documentId } = useParams<{ documentId: string }>();
   const { document, loading, error } = useDocument(documentId ?? "");
+  const [exporting, setExporting] = useState(false);
+  const [exportError, setExportError] = useState<string | null>(null);
+
+  async function handleExport(format: "json" | "csv") {
+    if (document === null) {
+      return;
+    }
+    setExporting(true);
+    setExportError(null);
+    try {
+      if (format === "json") {
+        const data = await exportDocumentJson(document.id);
+        downloadText(
+          `${document.id}.json`,
+          JSON.stringify(data, null, 2),
+          "application/json",
+        );
+      } else {
+        const csv = await exportDocumentCsv(document.id);
+        downloadText(`${document.id}.csv`, csv, "text/csv");
+      }
+    } catch {
+      setExportError("Failed to export document");
+    } finally {
+      setExporting(false);
+    }
+  }
 
   if (loading) {
     return <p>Loading…</p>;
@@ -32,6 +65,25 @@ export function DocumentDetailView() {
       </dl>
 
       {document.error_detail && <p role="alert">{document.error_detail}</p>}
+
+      <section>
+        <h3>Export</h3>
+        <button
+          type="button"
+          disabled={exporting}
+          onClick={() => handleExport("json")}
+        >
+          Export JSON
+        </button>
+        <button
+          type="button"
+          disabled={exporting}
+          onClick={() => handleExport("csv")}
+        >
+          Export CSV
+        </button>
+        {exportError !== null && <p role="alert">{exportError}</p>}
+      </section>
 
       <section>
         <h3>Extracted data</h3>

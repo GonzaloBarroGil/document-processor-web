@@ -1,4 +1,5 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
 
@@ -6,7 +7,17 @@ vi.mock("../../api/client", () => ({
   apiClient: { GET: vi.fn() },
 }));
 
+vi.mock("../export/export-document", () => ({
+  exportDocumentJson: vi.fn(),
+  exportDocumentCsv: vi.fn(),
+  downloadText: vi.fn(),
+}));
+
 import { apiClient, type components } from "../../api/client";
+import {
+  downloadText,
+  exportDocumentJson,
+} from "../export/export-document";
 import { DocumentDetailView } from "./document-detail-view";
 
 type Document = components["schemas"]["Document"];
@@ -85,5 +96,45 @@ describe("DocumentDetailView", () => {
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "Failed to load document",
     );
+  });
+
+  it("exports the document as JSON", async () => {
+    getMock().mockResolvedValue({
+      data: {
+        id: "1",
+        type: "invoice",
+        region: "AR",
+        status: "COMPLETED",
+        media_type: "image/jpeg",
+        image_key: "img.jpg",
+        parsed_data: {
+          raw_text: "total: 100",
+          confidence: 0.95,
+          fields: { total: "100" },
+        },
+        created_at: "2026-01-01T00:00:00Z",
+        updated_at: "2026-01-01T00:00:00Z",
+      },
+      response: new Response(),
+    });
+    vi.mocked(exportDocumentJson).mockResolvedValue({
+      document_id: "1",
+      type: "invoice",
+      region: "AR",
+      status: "COMPLETED",
+      parsed_data: { raw_text: "total: 100", confidence: 0.95, fields: { total: "100" } },
+    });
+    vi.mocked(downloadText).mockImplementation(() => {});
+
+    renderDetail("1");
+
+    await screen.findByRole("heading", { name: /document 1/i });
+
+    await userEvent.click(screen.getByRole("button", { name: /export json/i }));
+
+    await waitFor(() => {
+      expect(exportDocumentJson).toHaveBeenCalledWith("1");
+      expect(downloadText).toHaveBeenCalled();
+    });
   });
 });
