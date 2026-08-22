@@ -5,14 +5,11 @@ import { LoginView } from "./auth/login-view";
 import { RequireAuth } from "./auth/require-auth";
 import { AppLayout } from "./components/app-layout";
 import { ApiKeysView } from "./features/api-keys/api-keys-view";
+import { DashboardView } from "./features/dashboard/dashboard-view";
 import { DocumentDetailView } from "./features/documents/document-detail-view";
 import { DocumentListView } from "./features/documents/document-list-view";
 import { ReviewEditorView } from "./features/review/review-editor-view";
 import { ReviewQueueView } from "./features/review/review-queue-view";
-
-function Dashboard() {
-  return <h2>Dashboard</h2>;
-}
 
 export function App() {
   return (
@@ -22,7 +19,7 @@ export function App() {
           <Route path="/login" element={<LoginView />} />
           <Route element={<RequireAuth />}>
             <Route element={<AppLayout />}>
-              <Route index element={<Dashboard />} />
+              <Route index element={<DashboardView />} />
               <Route path="documents" element={<DocumentListView />} />
               <Route path="documents/:documentId" element={<DocumentDetailView />} />
               <Route path="review" element={<ReviewQueueView />} />
