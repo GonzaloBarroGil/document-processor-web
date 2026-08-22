@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 import { useDocuments, type DocumentStatus, type DocumentType } from "./use-documents";
 
@@ -99,6 +100,7 @@ export function DocumentListView() {
                 <th>Region</th>
                 <th>Status</th>
                 <th>Created</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -108,6 +110,9 @@ export function DocumentListView() {
                   <td>{document.region}</td>
                   <td>{document.status}</td>
                   <td>{new Date(document.created_at).toLocaleDateString()}</td>
+                  <td>
+                    <Link to={`/documents/${document.id}`}>View</Link>
+                  </td>
                 </tr>
               ))}
             </tbody>

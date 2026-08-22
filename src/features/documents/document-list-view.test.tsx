@@ -1,5 +1,6 @@
 import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
 
 vi.mock("../../api/client", () => ({
@@ -22,6 +23,14 @@ type GetMock = Mock<(path: string, init: unknown) => Promise<GetResult>>;
 
 function getMock(): GetMock {
   return apiClient.GET as unknown as GetMock;
+}
+
+function renderList() {
+  return render(
+    <MemoryRouter>
+      <DocumentListView />
+    </MemoryRouter>,
+  );
 }
 
 function makeDocument(
@@ -51,7 +60,7 @@ describe("DocumentListView", () => {
       response: new Response(),
     });
 
-    render(<DocumentListView />);
+    renderList();
 
     expect(
       await screen.findByText("2 documents (page 1 of 1)"),
@@ -66,7 +75,7 @@ describe("DocumentListView", () => {
       response: new Response(null, { status: 500 }),
     });
 
-    render(<DocumentListView />);
+    renderList();
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
       "Failed to load documents",
@@ -79,7 +88,7 @@ describe("DocumentListView", () => {
       response: new Response(),
     });
 
-    render(<DocumentListView />);
+    renderList();
 
     await screen.findByText("25 documents (page 1 of 2)");
 

@@ -4,6 +4,7 @@ import { AuthProvider } from "./auth/auth-provider";
 import { LoginView } from "./auth/login-view";
 import { RequireAuth } from "./auth/require-auth";
 import { AppLayout } from "./components/app-layout";
+import { DocumentDetailView } from "./features/documents/document-detail-view";
 import { DocumentListView } from "./features/documents/document-list-view";
 
 function Dashboard() {
@@ -28,6 +29,7 @@ export function App() {
             <Route element={<AppLayout />}>
               <Route index element={<Dashboard />} />
               <Route path="documents" element={<DocumentListView />} />
+              <Route path="documents/:documentId" element={<DocumentDetailView />} />
               <Route path="review" element={<Review />} />
             </Route>
           </Route>
