@@ -2,6 +2,7 @@
   "name": "document-processor-web",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@11.22.0",
   "type": "module",
   "description": "React + Vite + TypeScript SPA back-office for the document processor product family.",
   "scripts": {
